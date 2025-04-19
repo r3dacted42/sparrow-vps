@@ -6,4 +6,4 @@ docker build:
 `docker build -t repo-service .`
 
 docker run:
-`docker run -it --rm -p8000:8000 --name repo-service repo-service`
+`docker run -it --rm -p 8000:8000 --name repo-service repo-service`

@@ -4,7 +4,7 @@ import stat
 import subprocess
 from fastapi import APIRouter, status, Response
 from dotenv import load_dotenv
-from ..utils import force_remove
+from ..utils.force_remove import force_remove
 
 router = APIRouter(
     prefix="/clone",

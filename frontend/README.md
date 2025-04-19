@@ -4,4 +4,4 @@ docker build:
 `docker build -t sparrow-vps-frontend .`
 
 docker run:
-`docker run -it --rm -p5173:5173 --name frontend sparrow-vps-frontend`
+`docker run -it --rm -p 5173:80 --name frontend sparrow-vps-frontend`

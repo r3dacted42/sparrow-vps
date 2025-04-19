@@ -1,16 +1,12 @@
-FROM node:slim
-
-RUN npm install -g serve
-
+FROM node:slim AS builder
 WORKDIR /app
-
 COPY package*.json ./
-RUN npm install
-
-COPY . .
+RUN npm install --frozen-lockfile
+COPY . ./
 RUN chmod -R a+x node_modules
 RUN npm run build
 
-EXPOSE 5173
-
-CMD [ "serve", "-p", "5173", "dist" ]
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
