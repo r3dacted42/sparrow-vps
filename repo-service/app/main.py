@@ -9,6 +9,7 @@ app = FastAPI()
 load_dotenv()
 ALLOWED_ORIGINS_STR = os.getenv("ALLOWED_ORIGINS")
 origins = ALLOWED_ORIGINS_STR.split(',') if ALLOWED_ORIGINS_STR else ["*"]
+print("allowed origins:", origins)
 
 app.add_middleware(
     CORSMiddleware,

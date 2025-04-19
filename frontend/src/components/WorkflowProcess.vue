@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, watch, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import workflowSteps from '../data/workflowSteps';
 import type { RepoData } from '../types';
 import axios from 'axios';
@@ -24,6 +24,7 @@ interface WorkflowStepData {
 const stepKeys = ref<string[]>([]);
 const steps = ref<Record<string, WorkflowStepData>>({});
 const currentStepIdx = ref(0);
+const working = ref(true);
 
 watch(
     () => props.workflowData,
@@ -56,19 +57,28 @@ watch(
     async (newIdx: number) => {
         const stepKey = stepKeys.value[newIdx];
         const stepEndpoint = steps.value[stepKey].endpoint;
+        const newSteps = steps.value;
         try {
+            let response;
             if (stepKey === 'clone') {
-                const response = await axios.post(stepEndpoint(props.repoData.owner, props.repoData.name));
+                response = await axios.post(stepEndpoint(props.repoData.owner, props.repoData.name));
                 if (response.data && response.status === 200) {
-                    const newSteps = steps.value;
                     newSteps[stepKey].result = `return code: ${response.data.return_code}\nstdout: ${response.data.stdout}\nstderr: ${response.data.stderr}`;
-                    steps.value = newSteps;
                 }
             }
+            if (!response) throw Error("response not defined");
+            if (response.status !== 200 && response.status !== 201) {
+                newSteps[stepKey].result = `server responded: ${response.data.message}`;
+                working.value = false;
+            }
         } catch (err: any) {
+            const errorMessage = err instanceof Error ? err.message : String(err);
             console.error(`failed at step ${steps.value[stepKey].title}:`, err);
+            newSteps[stepKey].result = `failed at step: ${errorMessage}`;
+            working.value = false;
         }
-        if (newIdx < stepKeys.value.length - 1) {
+        steps.value = newSteps;
+        if (working.value && newIdx < stepKeys.value.length - 1) {
             currentStepIdx.value = newIdx + 1;
         }
     },
