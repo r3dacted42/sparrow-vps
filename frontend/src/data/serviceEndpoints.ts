@@ -1,5 +1,6 @@
 const baseUrls = {
     repoService: "http://localhost:8000",
+    containerService: "http://localhost:8001",
 };
 
 const serviceEndpoints = {
@@ -11,6 +12,10 @@ const serviceEndpoints = {
             return baseUrls.repoService + `/clone/${owner}/${repo}`;
         },
     },
+    containerService: {
+        preview: () => {},
+        build: () => {},
+    }
 };
 
 export { baseUrls, serviceEndpoints };

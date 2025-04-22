@@ -6,15 +6,15 @@ const workflowSteps: Record<string, WorkflowStep> = {
         title: "Cloning Repository",
         endpoint: serviceEndpoints.repoService.clone,
     },
-    'installCommand': {
+    'install_command': {
         title: "Installing Dependencies",
         endpoint: () => {},
     },
-    'buildCommand': {
+    'build_command': {
         title: "Running Build",
         endpoint: () => {},
     },
-    'dockerImage': {
+    'build_image': {
         title: "Building Docker Image",
         endpoint: () => {},
     },

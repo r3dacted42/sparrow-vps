@@ -61,6 +61,9 @@ const handleSubmit = () => {
                 <label :for="field.name">{{ field.label }}</label>
                 <input v-if="field.type === 'text'" type="text" :id="field.name" v-model="field.value"
                     :placeholder="field.placeholder" />
+                <select v-if="field.type === 'select'" :id="field.name" v-model="field.value">
+                    <option v-for="option in field.options" :value="option.value">{{ option.label }}</option>
+                </select>
             </div>
             <button type="submit" :disabled="!isFormValid">Proceed</button>
         </form>
