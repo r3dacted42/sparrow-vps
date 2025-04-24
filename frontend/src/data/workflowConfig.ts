@@ -12,6 +12,7 @@ const workflowConfig: Record<string, WorkflowField[]> = {
             options: [
                 { value: '18', label: '18' },
                 { value: '20', label: '20' },
+                { value: '22', label: '22' },
                 { value: '23', label: '23' },
             ],
         },

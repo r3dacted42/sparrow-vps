@@ -10,8 +10,7 @@ func GetNodeJSDockerfilePreview(
 	environmentVars string,
 ) (string, error) {
 	dockerfile := fmt.Sprintf(
-		`FROM node:%v-alpine AS builder
-ARG %v
+		`FROM node:%v-alpine AS builder%v
 WORKDIR /app
 COPY package*.json ./
 RUN %v
@@ -24,7 +23,12 @@ COPY --from=builder /app/%v /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]`,
 		nodeVersion,
-		environmentVars,
+		func() string {
+			if environmentVars != "" {
+				return "\nARG " + environmentVars
+			}
+			return ""
+		}(),
 		installCommand,
 		buildCommand,
 		outputDirectory,

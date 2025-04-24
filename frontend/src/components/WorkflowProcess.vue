@@ -2,7 +2,6 @@
 import { ref, watch, computed } from 'vue';
 import workflowSteps from '../data/workflowSteps';
 import type { RepoData } from '../types';
-import axios from 'axios';
 
 const props = defineProps({
     repoData: {
@@ -13,6 +12,10 @@ const props = defineProps({
         type: Object as () => Record<string, string>,
         required: true,
     },
+    dockerfile: {
+        type: String,
+        required: true,
+    },
 });
 
 interface WorkflowStepData {
@@ -21,32 +24,20 @@ interface WorkflowStepData {
     result: string;
 };
 
-const stepKeys = ref<string[]>([]);
-const steps = ref<Record<string, WorkflowStepData>>({});
+const stepKeys = ref<string[]>(Object.keys(workflowSteps));
+const steps = ref<Record<string, WorkflowStepData>>(
+    Object.keys(workflowSteps).reduce((obj, key) => {
+        if (workflowSteps[key]) {
+            obj[key] = {
+                ...workflowSteps[key],
+                result: "",
+            };
+        }
+        return obj;
+    }, {} as Record<string, WorkflowStepData>)
+);
 const currentStepIdx = ref(0);
 const working = ref(true);
-
-watch(
-    () => props.workflowData,
-    (newData: Record<string, string>) => {
-        const keys = [
-            "clone",
-            ...Object.keys(newData),
-            "dockerImage",
-        ];
-        stepKeys.value = keys;
-        steps.value = keys.reduce((obj, key) => {
-            if (workflowSteps[key]) {
-                obj[key] = {
-                    ...workflowSteps[key],
-                    result: "",
-                };
-            }
-            return obj;
-        }, {} as Record<string, WorkflowStepData>);
-    },
-    { immediate: true },
-);
 
 const indexedSteps = computed(() => {
     return stepKeys.value.map((k) => steps.value[k]).filter((s) => s);
@@ -61,15 +52,32 @@ watch(
         try {
             let response;
             if (stepKey === 'clone') {
-                response = await axios.post(stepEndpoint(props.repoData.owner, props.repoData.name));
+                response = await stepEndpoint(
+                    props.repoData.owner, 
+                    props.repoData.name,
+                );
                 if (response.data && response.status === 200) {
-                    newSteps[stepKey].result = `return code: ${response.data.return_code}\nstdout: ${response.data.stdout}\nstderr: ${response.data.stderr}`;
+                    newSteps[stepKey].result = `return code: ${response.data.return_code}\n`
+                        + `stdout: ${response.data.stdout}\n`
+                        + `stderr: ${response.data.stderr}`;
+                }
+            }
+            if (stepKey === 'build_image') {
+                response = await stepEndpoint(
+                    props.repoData.owner,
+                    props.repoData.name,
+                    props.workflowData.project_type,
+                    props.dockerfile,
+                );
+                if (response.data && response.status === 200) {
+                    newSteps[stepKey].result = `message: ${response.data.message}\n`
+                        + `logs:\n${response.data.logs}`;
                 }
             }
             if (!response) throw Error("response not defined");
             if (response.status !== 200 && response.status !== 201) {
-                newSteps[stepKey].result = `server responded: ${response.data.message}`;
-                working.value = false;
+                throw Error(`message: ${response.data.message}\n`
+                    + `error: ${response.data.error}`);
             }
         } catch (err: any) {
             const errorMessage = err instanceof Error ? err.message : String(err);
@@ -80,6 +88,8 @@ watch(
         steps.value = newSteps;
         if (working.value && newIdx < stepKeys.value.length - 1) {
             currentStepIdx.value = newIdx + 1;
+        } else {
+            working.value = false;
         }
     },
     { immediate: true },
@@ -90,9 +100,9 @@ watch(
     <div>
         <div v-for="(step, idx) in indexedSteps" :key="idx">
             <p>{{ step.title }}</p>
-            <progress v-if="currentStepIdx === idx" />
-            <textarea v-if="step.result" readonly>
-{{ step.result }}</textarea>
+            <progress v-if="working && currentStepIdx === idx"></progress>
+            <textarea v-if="step.result" v-model="step.result" 
+                v-bind:rows="step.result.split('\n').length > 4 ? 10 : 3" readonly></textarea>
         </div>
     </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import axios from 'axios';
 import { computed, ref } from 'vue';
 import { serviceEndpoints } from '../data/serviceEndpoints';
 
@@ -55,7 +54,7 @@ const handleSubmit = async () => {
     isSubmitting.value = true;
     try {
         const owner = urlData.value.owner, repo = urlData.value.repo;
-        const response = await axios.get(serviceEndpoints.repoService.probe(owner, repo));
+        const response = await serviceEndpoints.repoService.probe(owner, repo);
         if (response.data && response.status === 200) {
             const language = response.data.language;
             result.value = "Repo verified successfully!";

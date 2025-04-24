@@ -42,7 +42,7 @@ const handleSubmit = () => {
             obj[field.name] = field.value;
             return obj;
         }, {} as Record<string, string>);
-        data['language'] = selectedWorkflow.value;
+        data['project_type'] = selectedWorkflow.value.toLowerCase();
         emit('workflow-data', data);
     }
 }

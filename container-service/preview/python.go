@@ -22,15 +22,19 @@ func GetPythonDockerfilePreview(
 	cmdString += `]`
 
 	dockerfile := fmt.Sprintf(
-		`FROM python:alpine
-ARG %v
+		`FROM python:alpine%v
 WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN %v
 COPY . ./
 EXPOSE %v
 CMD %v`,
-		environmentVars,
+		func() string {
+			if environmentVars != "" {
+				return "\nARG " + environmentVars
+			}
+			return ""
+		}(),
 		installCommand,
 		exposePort,
 		cmdString,
