@@ -10,4 +10,5 @@ spec:
   - protocol: TCP
     port: 8001
     targetPort: 8001
-  type: ClusterIP
+    nodePort: 30081
+  type: NodePort

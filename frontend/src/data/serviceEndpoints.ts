@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const baseUrls = {
-    repoService: "http://repo-service-svc:8000",
-    containerService: "http://container-service-svc:8001",
+    repoService: "http://sparrow-vps.local:30080",
+    containerService: "http://sparrow-vps.local:30081",
 };
 
 const serviceEndpoints = {

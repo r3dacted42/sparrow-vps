@@ -3,13 +3,22 @@
   hosts: localhost
   gather_facts: false
 
+  vars:
+    venv_path: "/var/lib/jenkins/workspace/.venv"
+
   tasks:
-    - name: Install Kubernetes and PyYAML Python Libraries
+    - name: Create Virtual Environment
+      ansible.builtin.command:
+        cmd: python3 -m venv {{ venv_path }}
+      changed_when: false
+      ignore_errors: true
+
+    - name: Install Kubernetes and PyYAML in Virtual Environment
       ansible.builtin.pip:
         name:
           - kubernetes
           - PyYAML
-        executable: "{{ python_path }}"
+        executable: "{{ venv_path }}/bin/python3"
         extra_args: "--no-cache-dir"
     
     - name: Create Sparrow Namespace
