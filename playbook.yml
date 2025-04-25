@@ -1,0 +1,53 @@
+---
+- name: Deploy Sparrow Kubernetes Resources
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create Sparrow Namespace
+      kubernetes.core.k8s:
+        name: sparrow-vps
+        api_version: v1
+        kind: Namespace
+        state: present
+      ignore_errors: true
+
+    - name: Deploy Persistent Volume
+      kubernetes.core.k8s:
+        state: present
+        src: ./kubernetes/sparrow-pv.yml
+        namespace: sparrow-vps
+
+    - name: Deploy Persistent Volume Claim
+      kubernetes.core.k8s:
+        state: present
+        src: ./kubernetes/repo-data-pvc.yml
+        namespace: sparrow-vps
+
+    - name: Deploy Container Service Resources
+      kubernetes.core.k8s:
+        state: present
+        src: "./kubernetes/container-service/{{ item }}"
+        namespace: sparrow-vps
+      loop:
+        - container-service-deployment.yml
+        - container-service-svc.yml
+
+    - name: Deploy Repo Service Resources
+      kubernetes.core.k8s:
+        state: present
+        src: "./kubernetes/repo-service/{{ item }}"
+        namespace: sparrow-vps
+      loop:
+        - repo-service-deployment.yml
+        - repo-service-svc.yml
+
+    - name: Deploy Frontend Resources
+      kubernetes.core.k8s:
+        state: present
+        src: "./kubernetes/frontend/{{ item }}"
+        namespace: sparrow-vps
+      loop:
+        - frontend-deployment.yml
+        - frontend-service.yml
+        - frontend-ingress.yml
