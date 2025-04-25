@@ -7,7 +7,7 @@ COPY . ./
 # use -ldflags to strip debug information.
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /out/app .
 
-FROM docker:alpine
+FROM docker:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /app
 COPY --from=builder /out/app ./app
