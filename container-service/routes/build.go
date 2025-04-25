@@ -20,6 +20,7 @@ func HandleBuildRequest(c *gin.Context) {
 			"message": "bad request",
 			"error":   err.Error(),
 		})
+		return
 	}
 
 	cloneBaseDir := os.Getenv("CLONE_BASE_DIR")
@@ -41,6 +42,7 @@ func HandleBuildRequest(c *gin.Context) {
 			"message": "internal server error",
 			"error":   err.Error(),
 		})
+		return
 	}
 
 	if err = os.RemoveAll(clonePath); err != nil {

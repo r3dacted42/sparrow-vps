@@ -2,6 +2,7 @@ package main
 
 import (
 	"container-service/routes"
+	"container-service/utils"
 	"log"
 	"os"
 	"strings"
@@ -13,8 +14,10 @@ import (
 
 func main() {
 	router := gin.Default()
-	if err := godotenv.Load(); err != nil {
-		log.Println("could not load .env file: ", err)
+	godotenv.Load()
+
+	if err := utils.PingDocker(); err != nil {
+		panic("failed to ping docker: " + err.Error())
 	}
 
 	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
@@ -33,6 +36,6 @@ func main() {
 
 	port := ":8001"
 	if err := router.Run(port); err != nil {
-		panic("Failed to start service: " + err.Error())
+		panic("failed to start service: " + err.Error())
 	}
 }

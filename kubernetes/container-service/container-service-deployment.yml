@@ -17,16 +17,35 @@ spec:
       - name: repo-data-volume
         persistentVolumeClaim:
           claimName: repo-data-pvc
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
       containers:
       - name: container-service
         image: r3dacted42/sparrow-container-service
         volumeMounts:
         - name: repo-data-volume
           mountPath: /app/data
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
         ports:
         - containerPort: 8001
         env:
-        - name: BASE_CLONE_PATH
+        - name: CLONE_BASE_DIR
           value: /app/data
         - name: ALLOWED_ORIGINS
           value: http://localhost:5173
+        - name: DOCKER_HOST
+          value: unix:///var/run/docker.sock
+      - name: docker-socker-proxy
+        image: tecnativa/docker-socket-proxy:latest
+        securityContext:
+          privileged: false
+        ports:
+        - containerPort: 2375
+        volumeMounts:
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+        env:
+        - name: CONTAINERS
+          value: 1

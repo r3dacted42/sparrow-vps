@@ -26,7 +26,7 @@ spec:
         ports:
         - containerPort: 8000
         env:
-        - name: BASE_CLONE_PATH
+        - name: CLONE_BASE_DIR
           value: /app/data
         - name: ALLOWED_ORIGINS
           value: http://localhost:5173
