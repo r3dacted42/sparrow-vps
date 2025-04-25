@@ -9,6 +9,6 @@ spec:
   accessModes:
   - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: manual
+  # storageClassName: manual
   hostPath:
     path: /mnt/repo-data

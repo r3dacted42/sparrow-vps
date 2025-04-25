@@ -29,4 +29,4 @@ spec:
         - name: CLONE_BASE_DIR
           value: /app/data
         - name: ALLOWED_ORIGINS
-          value: http://localhost:5173
+          value: http://sparrow-vps.local

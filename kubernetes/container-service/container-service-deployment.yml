@@ -34,7 +34,7 @@ spec:
         - name: CLONE_BASE_DIR
           value: /app/data
         - name: ALLOWED_ORIGINS
-          value: http://localhost:5173
+          value: http://sparrow-vps.local
         - name: DOCKER_HOST
           value: unix:///var/run/docker.sock
       - name: docker-socker-proxy
@@ -48,4 +48,4 @@ spec:
           mountPath: /var/run/docker.sock
         env:
         - name: CONTAINERS
-          value: 1
+          value: "1"

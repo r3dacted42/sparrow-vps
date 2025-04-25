@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const baseUrls = {
-    repoService: "http://localhost:8000",
-    containerService: "http://localhost:8001",
+    repoService: "http://repo-service-svc:8000",
+    containerService: "http://container-service-svc:8001",
 };
 
 const serviceEndpoints = {
