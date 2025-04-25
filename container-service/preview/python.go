@@ -23,7 +23,7 @@ func GetPythonDockerfilePreview(
 
 	dockerfile := fmt.Sprintf(
 		`FROM python:alpine%v
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY requirements.txt ./
 RUN %v
 COPY . ./
@@ -31,7 +31,7 @@ EXPOSE %v
 CMD %v`,
 		func() string {
 			if environmentVars != "" {
-				return "\nARG " + environmentVars
+				return "\nENV " + environmentVars
 			}
 			return ""
 		}(),

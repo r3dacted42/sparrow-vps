@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: repo-service-deployment
+  namespace: sparrow-vps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: repo-service
+  template:
+    metadata:
+      labels:
+        app: repo-service
+    spec:
+      volumes:
+      - name: repo-data-volume
+        persistentVolumeClaim:
+          claimName: repo-data-pvc
+      containers:
+      - name: repo-service
+        image: r3dacted42/sparrow-repo-service
+        volumeMounts:
+        - name: repo-data-volume
+          mountPath: /app/data
+        ports:
+        - containerPort: 8000
+        env:
+        - name: BASE_CLONE_PATH
+          value: /app/data
+        - name: ALLOWED_ORIGINS
+          value: http://localhost:5173

@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 // build docker image using given data
@@ -23,9 +22,6 @@ func HandleBuildRequest(c *gin.Context) {
 		})
 	}
 
-	if err := godotenv.Load(); err != nil {
-		log.Println("could not load .env file: ", err)
-	}
 	cloneBaseDir := os.Getenv("CLONE_BASE_DIR")
 	log.Println("clone base dir: ", cloneBaseDir)
 	if cloneBaseDir == "" {
@@ -45,6 +41,10 @@ func HandleBuildRequest(c *gin.Context) {
 			"message": "internal server error",
 			"error":   err.Error(),
 		})
+	}
+
+	if err = os.RemoveAll(clonePath); err != nil {
+		log.Println("failed to delete clonePath: ", err)
 	}
 
 	c.JSON(http.StatusOK, gin.H{

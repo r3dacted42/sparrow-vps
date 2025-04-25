@@ -25,7 +25,7 @@ CMD ["nginx", "-g", "daemon off;"]`,
 		nodeVersion,
 		func() string {
 			if environmentVars != "" {
-				return "\nARG " + environmentVars
+				return "\nENV " + environmentVars
 			}
 			return ""
 		}(),
