@@ -18,7 +18,7 @@ import (
 )
 
 func BuildImageFromDockerfile(
-	imageName string,
+	imageTag string,
 	clonePath string,
 	dockerfile string,
 ) (string, string, error) {
@@ -49,7 +49,7 @@ func BuildImageFromDockerfile(
 		buf,
 		types.ImageBuildOptions{
 			Dockerfile: "Dockerfile",
-			Tags:       []string{imageName},
+			Tags:       []string{imageTag},
 			Remove:     false,
 		},
 	)
@@ -65,21 +65,21 @@ func BuildImageFromDockerfile(
 		err := decoder.Decode(&rawMessage)
 		if err != nil {
 			if err == io.EOF {
-				break // End of stream
+				break
 			}
 			return "", logBuf.String(), fmt.Errorf("error decoding event: %w", err)
 		}
 
-		// Check if it's a simple stream message
 		if stream, ok := rawMessage["stream"].(string); ok {
+			if stream == "" {
+				continue // skip if its empty
+			}
 			timestamp := time.Now().Format("2006-01-02 15:04:05.000")
 			logMessage := fmt.Sprintf("[%s] %s", timestamp, stream)
 			log.Print(logMessage)
 			logBuf.WriteString(logMessage)
 		} else {
-			// Attempt to decode it as an events.Message
 			var event events.Message
-			//convert rawMessage to json.Marshal
 			rawMessageBytes, err := json.Marshal(rawMessage)
 			if err != nil {
 				log.Printf("Error marshalling message: %v, using default log : %v", err, rawMessage)
@@ -90,7 +90,7 @@ func BuildImageFromDockerfile(
 			if err != nil {
 				log.Printf("Error unmarshalling event: %v, using default log : %v", err, rawMessage)
 				logBuf.WriteString(fmt.Sprintf("Error unmarshalling event: %v, using default log : %v", err, rawMessage))
-				continue // Skip if it's not a valid event
+				continue // skip if it's not a valid event
 			}
 			utils.PrettyPrintEvent(os.Stdout, event)
 			utils.PrettyPrintEvent(&logBuf, event)

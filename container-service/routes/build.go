@@ -32,8 +32,9 @@ func HandleBuildRequest(c *gin.Context) {
 	clonePath := filepath.Join(cloneBaseDir, request.RepoOwner, request.RepoName)
 	log.Println("clone path: ", clonePath)
 
+	imageTag := fmt.Sprintf("%s/%s", request.RepoOwner, request.RepoName)
 	msg, logs, err := builder.BuildImageFromDockerfile(
-		fmt.Sprintf("%s/%s", request.RepoOwner, request.RepoName),
+		imageTag,
 		clonePath,
 		request.Dockerfile,
 	)
@@ -50,7 +51,8 @@ func HandleBuildRequest(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": msg,
-		"logs":    logs,
+		"message":   msg,
+		"image_tag": imageTag,
+		"logs":      logs,
 	})
 }
