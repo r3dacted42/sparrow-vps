@@ -33,8 +33,11 @@ spec:
         env:
         - name: CLONE_BASE_DIR
           value: /app/data
-        - name: ALLOWED_ORIGINS
-          value: http://sparrow-vps.local
+        - name: SPARROW_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              name: sparrow-config
+              key: allowedOrigins
         - name: DOCKER_HOST
           value: unix:///var/run/docker.sock
       - name: docker-socker-proxy

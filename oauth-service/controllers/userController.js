@@ -1,6 +1,5 @@
-
-const supabase = require("../config/db");
-const { doesEntryExist } = require("../utils/tableManager");
+import client from "../config/db.js";
+import { doesEntryExist } from "../utils/tableManager.js";
 
 async function checkUser(req, res, next) {
   try {
@@ -17,8 +16,7 @@ async function checkSessionStatus(req, res, next) {
   const sessionLimit = 1;
   
   try {
-    const { data, error } = await supabase
-      .from("users_superset")
+    const { data, error } = await client.from("users_superset")
       .select("modified_date")
       .eq("username", username);
 
@@ -45,8 +43,7 @@ async function insertData(req, res, next) {
   try {
     const { table_name, insert_object } = req.body;
 
-    const { data, error } = await supabase
-      .from(table_name)
+    const { data, error } = await client.from(table_name)
       .insert([insert_object])
       .select();
 
@@ -79,8 +76,7 @@ async function updateUser(req, res, next) {
     const updateObject = {};
     updateObject[column] = newValue;
 
-    const { data, error } = await supabase
-      .from("users_superset")
+    const { data, error } = await client.from("users_superset")
       .update(updateObject)
       .eq("username", username)
       .select();
@@ -101,7 +97,7 @@ async function updateUser(req, res, next) {
   }
 }
 
-module.exports = { 
+export { 
   checkUser,
   checkSessionStatus,
   insertData,

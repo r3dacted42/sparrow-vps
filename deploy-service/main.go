@@ -20,7 +20,7 @@ func main() {
 		panic("failed to ping docker: " + err.Error())
 	}
 
-	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
+	allowedOrigins := os.Getenv("SPARROW_ORIGIN")
 	log.Println("allowed origins: ", allowedOrigins)
 	if allowedOrigins == "" {
 		router.Use(cors.Default())

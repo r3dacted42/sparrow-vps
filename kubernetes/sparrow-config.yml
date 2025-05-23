@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sparrow-config
+  namespace: sparrow-vps
+data:
+  allowedOrigins: "http://sparrow-vps.local"

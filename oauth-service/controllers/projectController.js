@@ -1,6 +1,6 @@
-const supabase = require("../config/db");
-const { checkTableExists, createTable, doesEntryExist } = require("../utils/tableManager");
-const { validateGitUrl } = require("../utils/validation");
+import client from "../config/db.js";
+import { doesEntryExist } from "../utils/tableManager.js";
+import { validateGitUrl } from "../utils/validation.js";
 
 async function addProject(req, res, next) {
   try {
@@ -24,8 +24,7 @@ async function addProject(req, res, next) {
       });
     }
 
-    const { data, error } = await supabase
-      .from(tablename)
+    const { data, error } = await client.from(tablename)
       .insert([{ user: user, repourl: repolink }])
       .select();
 
@@ -50,7 +49,7 @@ async function fetchRows(req, res, next) {
       return res.status(400).json({ error: "Missing table parameter" });
     }
 
-    const { data, error } = await supabase.from(tableName).select("*").eq('user',user);
+    const { data, error } = await client.from(table).select("*").eq('user',user);
     
     if (error) {
       return next(error);
@@ -61,7 +60,7 @@ async function fetchRows(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   addProject,
   fetchRows
 };

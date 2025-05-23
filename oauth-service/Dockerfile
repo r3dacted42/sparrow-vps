@@ -1,0 +1,13 @@
+FROM node:slim
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --frozen-lockfile
+COPY . .
+EXPOSE 8003
+ENV SPARROW_ORIGIN="http://localhost:5173" \
+    GITHUB_CLIENT_ID="PLACEHOLDER" \
+    GITHUB_CLIENT_SECRET="PLACEHOLDER" \
+    SUPABASE_API_KEY="PLACEHOLDER" \
+    SUPABASE_DB_URL="PLACEHOLDER" \
+    SUPABASE_DB_PWD="PLACEHOLDER"
+CMD [ "node", "server.js" ]

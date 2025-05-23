@@ -1,11 +1,9 @@
-// routes/authRoutes.js - Authentication routes
-const express = require("express");
-const router = express.Router();
-const authController = require("../controllers/authController");
+import { Router } from "express";
+import { getGithubAccessToken, getGithubUserData, fetchGithubRepos } from "../controllers/authController.js";
 
-// GitHub OAuth routes
-router.get("/github/token", authController.getGithubAccessToken);
-router.get("/github/user", authController.getGithubUserData);
-router.get("/github/repos", authController.fetchGithubRepos);
+const router = Router();
+router.get("/github/token", getGithubAccessToken);
+router.get("/github/user", getGithubUserData);
+router.get("/github/repos", fetchGithubRepos);
 
-module.exports = router;
+export default router;

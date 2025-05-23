@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 app = FastAPI()
 
 load_dotenv()
-ALLOWED_ORIGINS_STR = os.getenv("ALLOWED_ORIGINS")
-origins = ALLOWED_ORIGINS_STR.split(',') if ALLOWED_ORIGINS_STR else ["*"]
+SPARROW_ORIGIN_STR = os.getenv("SPARROW_ORIGIN")
+origins = SPARROW_ORIGIN_STR.split(',') if SPARROW_ORIGIN_STR else ["*"]
 print("allowed origins:", origins)
 
 app.add_middleware(

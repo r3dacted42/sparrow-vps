@@ -10,6 +10,6 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /app
 COPY --from=builder /out/app ./app
 EXPOSE 8081
-ENV ALLOWED_ORIGINS="http://localhost:5173,http://my-frontend.com" \
+ENV SPARROW_ORIGIN="http://localhost:5173" \
     CLONE_BASE_DIR="/temp"
 CMD [ "./app" ]

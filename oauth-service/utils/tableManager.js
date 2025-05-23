@@ -1,4 +1,4 @@
-const supabase = require("../config/db");
+import client from "../config/db.js";
 
 /**
  * Check if a table exists in the database
@@ -7,7 +7,7 @@ const supabase = require("../config/db");
  */
 async function checkTableExists(tablename) {
   try {
-    const { data, error } = await supabase.rpc("validatetable", {
+    const { data, error } = await client.rpc("validatetable", {
       tablename: tablename,
     });
 
@@ -31,7 +31,7 @@ async function checkTableExists(tablename) {
  */
 async function createTable(tableName, schemaDefinition) {
   try {
-    const { data, error } = await supabase.rpc("creattable", {
+    const { data, error } = await client.rpc("creattable", {
       table_name: tableName,
       table_definition: schemaDefinition,
     });
@@ -57,8 +57,7 @@ async function createTable(tableName, schemaDefinition) {
  */
 async function doesEntryExist(tablename, column, value) {
   try {
-    const { data, error } = await supabase
-      .from(tablename)
+    const { data, error } = await client.from(tablename)
       .select(column)
       .eq(column, value)
       .limit(1);
@@ -75,7 +74,7 @@ async function doesEntryExist(tablename, column, value) {
   }
 }
 
-module.exports = {
+export {
   checkTableExists,
   createTable,
   doesEntryExist

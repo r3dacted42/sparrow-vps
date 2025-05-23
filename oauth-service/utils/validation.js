@@ -33,6 +33,6 @@ async function validateGitUrl(gitUrl) {
   }
 }
 
-module.exports = {
+export {
   validateGitUrl
 };

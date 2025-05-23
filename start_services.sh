@@ -5,8 +5,8 @@ minikube_status_code=$?
 if [ $minikube_status_code -eq 0 ]; then
   echo "minikube is running."
 else
-  echo "minikube is not running. exiting..."
-  exit 1
+  echo "minikube is not running, starting..."
+  minikube start > /dev/null 2>&1
 fi
 
 kubectl create namespace sparrow-vps
@@ -17,15 +17,20 @@ deploy_resource() {
   kubectl apply -f "$resource_path"
 }
 
-deploy_resource "./kubernetes/sparrow-pv.yml"
-deploy_resource "./kubernetes/repo-data-pvc.yml"
-deploy_resource "./kubernetes/repo-service/repo-service-deployment.yml"
-deploy_resource "./kubernetes/repo-service/repo-service-svc.yml"
-deploy_resource "./kubernetes/container-service/container-service-deployment.yml"
-deploy_resource "./kubernetes/container-service/container-service-svc.yml"
-deploy_resource "./kubernetes/frontend/frontend-deployment.yml"
-deploy_resource "./kubernetes/frontend/frontend-service.yml"
-deploy_resource "./kubernetes/frontend/frontend-ingress.yml"
+basepath="./kubernetes"
+repopath="$basepath/repo-service"
+contpath="$basepath/container-service"
+fronpath="$basepath/frontend"
+
+deploy_resource "$basepath/sparrow-pv.yml"
+deploy_resource "$basepath/repo-data-pvc.yml"
+deploy_resource "$repopath/repo-service-deployment.yml"
+deploy_resource "$repopath/repo-service-svc.yml"
+deploy_resource "$contpath/container-service-deployment.yml"
+deploy_resource "$contpath/container-service-svc.yml"
+deploy_resource "$fronpath/frontend-deployment.yml"
+deploy_resource "$fronpath/frontend-service.yml"
+deploy_resource "$fronpath/frontend-ingress.yml"
 
 minikube_ip=$(minikube ip)
 if grep -q "sparrow-vps.local" /etc/hosts; then

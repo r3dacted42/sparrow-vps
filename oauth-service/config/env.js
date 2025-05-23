@@ -1,10 +1,9 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 const requiredEnvVars = [
-  "PORT",
-  "SUPERBASE_DB_URL",
-  "SUPERBASE_API_KEY",
-  "REDIRECT_URL",
+  "SUPABASE_DB_URL",
+  "SUPABASE_API_KEY",
   "GITHUB_CLIENT_ID",
   "GITHUB_CLIENT_SECRET",
 ];
@@ -16,15 +15,13 @@ if (missingEnvVars.length > 0) {
   process.exit(1);
 }
 
-module.exports = {
-  PORT: process.env.PORT,
-  REDIRECT_URL: process.env.REDIRECT_URL,
-  GITHUB: {
-    CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-    CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET
-  },
-  GOOGLE: {
-    CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET
-  }
+export const PORT = process.env.PORT;
+export const REDIRECT_URL = process.env.REDIRECT_URL;
+export const GITHUB = {
+  CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+  CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET
+};
+export const GOOGLE = {
+  CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET
 };

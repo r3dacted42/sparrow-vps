@@ -1,11 +1,11 @@
 const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
-const config = require("../config/env");
+import { GITHUB } from "../config/env.js";
 
 async function getGithubAccessToken(req, res, next) {
   try {
     const params = 
-      "?client_id=" + config.GITHUB.CLIENT_ID +
-      "&client_secret=" + config.GITHUB.CLIENT_SECRET +
+      "?client_id=" + GITHUB.CLIENT_ID +
+      "&client_secret=" + GITHUB.CLIENT_SECRET +
       "&code=" + req.query.code;
     
     const accessTokenEndPoint = `https://github.com/login/oauth/access_token${params}`;
@@ -73,7 +73,7 @@ async function fetchGithubRepos(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   getGithubAccessToken,
   getGithubUserData,
   fetchGithubRepos

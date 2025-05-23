@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth-service-deployment
+  namespace: sparrow-vps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oauth-service
+  template:
+    metadata:
+      labels: 
+        app: oauth-service
+    spec:
+      containers:
+      - name: oauth-service
+        image: r3dacted42/sparrow-oauth-service
+        ports:
+        - containerPort: 8003
+        env:
+        - name: SPARROW_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              name: sparrow-config
+              key: allowedOrigins
+        - name: GITHUB_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: sparrow-secrets
+              key: ghClientId
+        - name: GITHUB_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: sparrow-secrets
+              key: ghClientSecret
+        - name: SUPABASE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sparrow-secrets
+              key: sbApiKey
+        - name: SUPABASE_DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: sparrow-secrets
+              key: sbDbUrl
+        - name: SUPABASE_DB_PWD
+          valueFrom:
+            secretKeyRef:
+              name: sparrow-secrets
+              key: sbDbPwd

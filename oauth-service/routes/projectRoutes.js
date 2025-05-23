@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const projectController = require("../controllers/projectController");
+import { Router } from "express";
+import { addProject, fetchRows } from "../controllers/projectController.js";
 
-router.post("/add", projectController.addProject);
-router.get("/fetch", projectController.fetchRows);
+const router = Router();
+router.post("/add", addProject);
+router.get("/fetch", fetchRows);
 
-module.exports = router;
+export default router;
