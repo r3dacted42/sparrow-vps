@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { checkLoggedIn } from '../helpers/loginHelpers';
+import { onMounted } from 'vue';
+import { useAuthStore } from '../stores/auth';
 import router from '../router';
 
-if (!checkLoggedIn()) {
-    router.push('/login');
-}
+const auth = useAuthStore();
+
+onMounted(() => {
+    if (!auth.checkAuthStatus()) {
+        router.push('/login');
+    }
+});
 </script>
 
 <template>
@@ -33,5 +38,11 @@ if (!checkLoggedIn()) {
 .add-button {
     font-size: 24pt;
     font-weight: 500;
+    margin-bottom: 10pt ;
+}
+
+a {
+    cursor:pointer;
+    text-decoration: none;
 }
 </style>
