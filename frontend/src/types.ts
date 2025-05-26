@@ -20,7 +20,7 @@ export interface WorkflowStep {
 }
 
 
-// Database Entity Interfaces (matching backend)
+// Database Entity Interfaces
 export interface DatabaseUser {
     github_id: number;
     username: string;
@@ -37,7 +37,7 @@ export interface DatabaseProject {
     id?: number;
     user: string;
     repourl: string;
-    created_date: string;
+    created_at: string;
 }
 
 
@@ -70,4 +70,7 @@ export interface CreateUserResponse {
 export interface ProjectResponse {
     message: string;
     data: DatabaseProject[];
+}
+export interface FetchProjectsResponse {
+    projects: DatabaseProject[];
 }

@@ -32,9 +32,6 @@ function logout() {
         </ul>
         <ul v-if="auth.isLoggedIn && userData">
             <li>
-                <RouterLink to="/add-project">Add Project</RouterLink>
-            </li>
-            <li>
                 <a :href="userData.html_url" target="_blank" rel="noopener noreferrer" 
                    style="display: flex; align-items: center; text-decoration: none;">
                     <img :src="userData.avatar_url" 
