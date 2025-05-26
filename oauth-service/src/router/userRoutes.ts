@@ -5,7 +5,7 @@ import {
   updateUser, 
   getUserSession,
   updateUserSession
-} from "../controller/userController";
+} from "../controllers/userController";
 
 const router: Router = Router();
 

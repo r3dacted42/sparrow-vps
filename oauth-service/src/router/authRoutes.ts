@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getGithubAccessToken, getGithubUserData } from "../controller/authController";
+import { getGithubAccessToken, getGithubUserData } from "../controllers/authController";
 
 const router = Router();
 router.get("/github/token", getGithubAccessToken);

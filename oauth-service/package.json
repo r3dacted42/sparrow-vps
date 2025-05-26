@@ -1,32 +1,28 @@
 {
-  "name": "oauth-service",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "tsprojtest",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "dev": "ts-node server.ts",
-    "start": "node dist/server.js",
-    "build": "tsc",
-    "build:vue": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "start": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "node-fetch": "^3.3.2",
-    "vue": "^3.5.13"
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
     "@types/node": "^20.17.50",
-    "@vitejs/plugin-vue": "^5.2.3",
-    "@vue/tsconfig": "^0.7.0",
+    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
-    "typescript": "~5.8.3",
-    "vite": "^6.3.5",
-    "vue-tsc": "^2.2.8"
+    "typescript": "^5.8.3"
   }
 }

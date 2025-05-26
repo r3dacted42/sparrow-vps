@@ -48,7 +48,8 @@ async function addProject(
     }
 }
 
-async function fetchRows(
+// Common function to fetch user data and 
+async function fetchProject(
     req: Request,
     res: Response, 
     next: NextFunction
@@ -77,5 +78,5 @@ async function fetchRows(
 
 export {
     addProject,
-    fetchRows
+    fetchProject
 };

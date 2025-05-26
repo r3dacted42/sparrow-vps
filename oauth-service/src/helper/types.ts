@@ -12,7 +12,7 @@ export interface SupaBaseEnv {
 // External API Response Interfaces
 export interface GitHubTokenResponse {
     access_token: string;
-    token_type: string;
+    token_type: string; 
     scope: string;
 }
 
@@ -42,7 +42,7 @@ export interface DatabaseProject {
     id?: number;
     user: string;
     repourl: string;
-    created_date: string;
+    created_at: string;
 }
 
 // API Request Interfaces

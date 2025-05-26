@@ -1,9 +1,9 @@
 import { Router, RequestHandler } from "express";
-import { addProject, fetchRows } from "../controller/projectController";
+import { addProject, fetchProject } from "../controllers/projectController";
 
 const router: Router = Router();
 
 router.post("/add", addProject as RequestHandler);
-router.get("/fetch", fetchRows as RequestHandler);
+router.get("/fetch", fetchProject as RequestHandler);
 
 export default router;
