@@ -3,7 +3,6 @@ package main
 import (
 	"deploy-service/routes"
 	"log"
-	"net/http"
 	"os"
 	"strings"
 
@@ -51,4 +50,3 @@ func main() {
 		panic("failed to start service: " + err.Error())
 	}
 }
-
