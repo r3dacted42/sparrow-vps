@@ -10,6 +10,9 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
+	// --- Prometheus handler ---
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -34,6 +37,9 @@ func main() {
 	router.GET("/preview", routes.HandlePreviewRequest)
 	router.POST("/build", routes.HandleBuildRequest)
 	router.POST("/push", routes.HandlePushRequest)
+
+	// --- Prometheus metrics endpoint ---
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	port := ":8001"
 	if err := router.Run(port); err != nil {
