@@ -80,8 +80,7 @@ async function refreshProjects() {
         <!-- Loading State -->
         <div v-if="loading" class="centered">
             <div class="loading">
-                <i class="fa-solid fa-spinner fa-spin"></i>
-                <p>Loading your projects...</p>
+                <p aria-busy="true">Loading your projects...</p>
             </div>
         </div>
 
@@ -102,7 +101,6 @@ async function refreshProjects() {
                 <p>Start by adding your first GitHub repository to deploy.</p>
                 <RouterLink to="/add-project" style="text-decoration: none;">
                     <button class="add-button">
-                        <i class="fa-solid fa-plus"></i>
                         Add Project
                     </button>
                 </RouterLink>
@@ -122,7 +120,7 @@ async function refreshProjects() {
                             <i class="fa-brands fa-github"></i> 
                             <span>{{ getRepoName(project.repourl) }}</span>
                         </h4>
-                        <p class="project-url">{{ project.repourl }}</p>
+                        <p class="project-url">{{ project.pathname }}</p>
                     </div>
                     <div class="project-actions">
                         <button 
@@ -143,10 +141,10 @@ async function refreshProjects() {
                 </div>
 
                 <div class="project-status">
-                    <span class="status-badge deployed">
+                    <a class="status-badge deployed" :href="project.pathname" target="_blank" title="View deployment">
                         <i class="fa-solid fa-check-circle"></i>
                         Deployed
-                    </span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -154,9 +152,8 @@ async function refreshProjects() {
         <!-- Add Project Button -->
         <div v-if="projects.length > 0" class="add-project-section">
             <RouterLink to="/add-project" style="text-decoration: none;">
-                <button class="outline">
-                    <i class="fa-solid fa-plus"></i>
-                    Add Another Project
+                <button>
+                    Add Project
                 </button>
             </RouterLink>
         </div>
@@ -316,6 +313,7 @@ async function refreshProjects() {
     background-color: rgba(46, 160, 67, 0.1);
     color: #2ea043;
     border: 1px solid rgba(46, 160, 67, 0.2);
+    text-decoration: inherit;
 }
 
 .add-project-section {

@@ -118,7 +118,7 @@ export async function fetchProjects(username: string) {
     }
 }
 
-export async function deleteProject(params: any) {
+export async function deleteProject(_params: any) {
     console.log('Delete projects functionality not implemented yet');
     // TODO: Implement when delete endpoint is added to backend
 }

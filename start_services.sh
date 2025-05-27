@@ -20,14 +20,28 @@ deploy_resource() {
 basepath="./kubernetes"
 repopath="$basepath/repo-service"
 contpath="$basepath/container-service"
+dplypath="$basepath/deploy-service"
+oathpath="$basepath/oauth-service"
 fronpath="$basepath/frontend"
 
 deploy_resource "$basepath/sparrow-pv.yml"
 deploy_resource "$basepath/repo-data-pvc.yml"
+
 deploy_resource "$repopath/repo-service-deployment.yml"
 deploy_resource "$repopath/repo-service-svc.yml"
+
 deploy_resource "$contpath/container-service-deployment.yml"
 deploy_resource "$contpath/container-service-svc.yml"
+
+deploy_resource "$dplypath/deploy-service-sa.yml"
+deploy_resource "$dplypath/deploy-service-crd.yml"
+deploy_resource "$dplypath/deploy-service-crb.yml"
+deploy_resource "$dplypath/deploy-service-deployment.yml"
+deploy_resource "$dplypath/deploy-service-svc.yml"
+
+deploy_resource "$oathpath/oauth-service-deployment.yml"
+deploy_resource "$oathpath/oauth-service-svc.yml"
+
 deploy_resource "$fronpath/frontend-deployment.yml"
 deploy_resource "$fronpath/frontend-service.yml"
 deploy_resource "$fronpath/frontend-ingress.yml"

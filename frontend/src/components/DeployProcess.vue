@@ -9,6 +9,8 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(['pathname']);
+
 const pathName = ref("");
 const exposePort = ref("");
 const isSubmitting = ref(false);
@@ -26,7 +28,9 @@ async function handleSubmit() {
             props.imageTag, pathName.value, exposePort.value,
         );
         if (response.data && response.status === 200) {
-            deployUrl.value = response.data.project_url;
+            const projUrl = response.data.project_url
+            deployUrl.value = projUrl;
+            emit('pathname', projUrl);
         }
     } catch (err: any) {
         //

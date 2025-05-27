@@ -1,4 +1,5 @@
 export interface RepoData {
+    repoUrl: string;
     owner: string;
     name: string;
     language: string;

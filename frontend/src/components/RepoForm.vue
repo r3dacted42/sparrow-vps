@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { serviceEndpoints } from '../data/serviceEndpoints';
-import { addProject } from '../helpers/userHelper';
+import { getUserData } from '../helpers/loginHelpers';
 
 const emit = defineEmits(['repo-data']);
 
@@ -58,30 +58,19 @@ const handleSubmit = async () => {
         result.value = "Please log in to add projects";
         return;
     }
-    
+
     isSubmitting.value = true;
     try {
         const owner = urlData.value.owner, repo = urlData.value.repo;
-        
-        // Verify the repository
         const response = await serviceEndpoints.repoService.probe(owner, repo);
         if (response.data && response.status === 200) {
             const language = response.data.language;
-            
-            //Save the project to database
-            const saveResult = await addProject(repoUrl.value);
-            
-            if (saveResult && !saveResult.error) {
-                result.value = "project added successfully!";
-                emit("repo-data", {
-                    language: language,
-                    owner: urlData.value.owner,
-                    name: urlData.value.repo,
-                });
-            } else {
-                // failed to save
-                result.value = saveResult?.message || "failed to save project.";
-            }
+            emit("repo-data", {
+                repoUrl: repoUrl.value,
+                language: language,
+                owner: urlData.value.owner,
+                name: urlData.value.repo,
+            });
         } else {
             result.value = response.data.message;
         }

@@ -13,6 +13,8 @@ pipeline {
 
         REPO_IMAGE = 'sparrow-repo-service'
         CONT_IMAGE = 'sparrow-container-service'
+        DPLY_IMAGE = 'sparrow-deploy-service'
+        OATH_IMAGE = 'sparrow-oauth-service'
         FRON_IMAGE = 'sparrow-frontend'
     }
 
@@ -41,6 +43,26 @@ pipeline {
                 script {
                     docker.withRegistry('', "${DOCKERHUB_CRED}") {
                         buildAndPushImage("${DOCKERHUB_REPO}/${CONT_IMAGE}:latest", './container-service')
+                    }
+                }
+            }
+        }
+
+        stage('Build and Push Deploy Service') {
+            steps {
+                script {
+                    docker.withRegistry('', "${DOCKERHUB_CRED}") {
+                        buildAndPushImage("${DOCKERHUB_REPO}/${DPLY_IMAGE}:latest", './deploy-service')
+                    }
+                }
+            }
+        }
+
+        stage('Build and Push OAuth Service') {
+            steps {
+                script {
+                    docker.withRegistry('', "${DOCKERHUB_CRED}") {
+                        buildAndPushImage("${DOCKERHUB_REPO}/${OATH_IMAGE}:latest", './oauth-service')
                     }
                 }
             }

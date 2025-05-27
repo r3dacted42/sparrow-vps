@@ -8,6 +8,7 @@ import PreviewDockerfile from '../components/PreviewDockerfile.vue';
 import router from '../router';
 import { useAuthStore } from '../stores/auth';
 import DeployProcess from '../components/DeployProcess.vue';
+import { addProject } from '../helpers/userHelper';
 
 const auth = useAuthStore();
 
@@ -25,6 +26,7 @@ const repoData = ref<RepoData>();
 const workflowData = ref<Record<string, string>>();
 const dockerfile = ref<string>("");
 const imageTag = ref<string>("");
+const projUrl = ref<string>("");
 
 const handleRepoData = (data: RepoData) => {
   repoData.value = data;
@@ -50,6 +52,11 @@ const handleImageTagData = (data: string, cancel?: boolean) => {
   imageTag.value = data;
   console.log(data);
 }
+const handleProjectUrl = (data: string) => {
+  projUrl.value = data;
+  if (!repoData.value) throw Error("repo data not available, cannot save project!");
+  addProject(repoData.value.repoUrl, data);
+}
 </script>
 
 <template>
@@ -59,5 +66,5 @@ const handleImageTagData = (data: string, cancel?: boolean) => {
     @dockerfile="handleDockerfileData" />
   <BuildProcess v-if="dockerfile && workflowData && repoData && !imageTag" :repo-data="repoData" :workflow-data="workflowData"
     :dockerfile="dockerfile" @image-tag="handleImageTagData" />
-  <DeployProcess v-if="imageTag" :image-tag="imageTag" />
+  <DeployProcess v-if="imageTag" :image-tag="imageTag" @pathname="handleProjectUrl" />
 </template>

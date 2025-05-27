@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
-    const isLoggedIn = ref(true);// ref(!!localStorage.getItem('accessToken'));
+    const isLoggedIn = ref(!!localStorage.getItem('accessToken'));
 
     const userData = computed(() => {
         const data = localStorage.getItem('userData');
