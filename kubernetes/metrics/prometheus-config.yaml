@@ -10,4 +10,7 @@ data:
     scrape_configs:
       - job_name: 'deploy-service'
         static_configs:
-          - targets: ['deploy-service.sparrow-vps.svc.cluster.local:8002']
+          - targets: ['sparrow-vps.local:30082']
+      - job_name: 'container-service'
+        static_configs:
+          - targets: ['sparrow-vps.local:30081']

@@ -15,7 +15,7 @@ FILES=(
 
 for file in "${FILES[@]}"; do
   echo "🔧 Applying $file..."
-  kubectl apply -f kubernetes/metrics/$file
+  kubectl apply -f $file
 done
 
 echo "✅ Metrics stack deployed!"
