@@ -15,6 +15,9 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
+
+	// --- [Prometheus] Import Prometheus client library ---
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 const (
@@ -23,6 +26,29 @@ const (
 
 var (
 	dockerClient *client.Client
+
+	// --- [Prometheus] Define metrics ---
+	buildCounter = prometheus.NewCounter(
+		prometheus.CounterOpts{
+			Name: "container_image_build_total",
+			Help: "Total number of container image builds triggered.",
+		},
+	)
+
+	buildFailures = prometheus.NewCounter(
+		prometheus.CounterOpts{
+			Name: "container_image_build_failures_total",
+			Help: "Total number of failed container image builds.",
+		},
+	)
+
+	buildDuration = prometheus.NewHistogram(
+		prometheus.HistogramOpts{
+			Name:    "container_image_build_duration_seconds",
+			Help:    "Histogram of image build durations.",
+			Buckets: prometheus.DefBuckets,
+		},
+	)
 )
 
 func init() {
@@ -31,6 +57,11 @@ func init() {
 	if err != nil {
 		log.Fatalf("failed to create Docker client: %v", err)
 	}
+
+	// --- [Prometheus] Register metrics ---
+	prometheus.MustRegister(buildCounter)
+	prometheus.MustRegister(buildFailures)
+	prometheus.MustRegister(buildDuration)
 }
 
 func BuildImage(
@@ -40,9 +71,13 @@ func BuildImage(
 ) (string, string, string, bool, error) { // fullTag, message, logs, success, error
 	ctx := context.Background()
 
+	startTime := time.Now() // --- [Prometheus] Start timing the build
+	buildCounter.Inc()      // --- [Prometheus] Increment build counter
+
 	dockerfilePath := filepath.Join(clonePath, "Dockerfile")
 	err := os.WriteFile(dockerfilePath, []byte(dockerfile), 0644)
 	if err != nil {
+		buildFailures.Inc() // --- [Prometheus] Increment failure counter
 		return "", "", "", false, fmt.Errorf("failed to write Dockerfile: %w", err)
 	}
 	log.Printf("Dockerfile written to: %s", dockerfilePath)
@@ -50,6 +85,7 @@ func BuildImage(
 	buf := new(bytes.Buffer)
 	err = utils.CreateTarArchive(clonePath, buf)
 	if err != nil {
+		buildFailures.Inc() // --- [Prometheus] Increment failure counter
 		return "", "", "", false, fmt.Errorf("failed to create tar archive for build context: %w", err)
 	}
 	log.Printf("Tar archive created from %s", clonePath)
@@ -67,6 +103,7 @@ func BuildImage(
 		},
 	)
 	if err != nil {
+		buildFailures.Inc() // --- [Prometheus] Increment failure counter
 		return "", "", "", false, fmt.Errorf("failed to initiate image build: %w", err)
 	}
 	defer buildResponse.Body.Close()
@@ -83,6 +120,7 @@ func BuildImage(
 			if err == io.EOF {
 				break
 			}
+			buildFailures.Inc() // --- [Prometheus] Increment failure counter
 			return "", logBuf.String(), "", false, fmt.Errorf("error decoding build event: %w", err)
 		}
 
@@ -105,6 +143,7 @@ func BuildImage(
 		logBuf.WriteString(logMessage)
 
 		if !buildSuccess {
+			buildFailures.Inc() // --- [Prometheus] Increment failure counter
 			break
 		}
 	}
@@ -114,6 +153,8 @@ func BuildImage(
 	}
 	logBuf.WriteString("--- image build complete ---\n")
 	log.Printf("image '%s' built successfully.", fullRegistryImageTag)
+
+	buildDuration.Observe(time.Since(startTime).Seconds()) // --- [Prometheus] Observe duration
 
 	return fullRegistryImageTag, "image built successfully", logBuf.String(), true, nil
 }
