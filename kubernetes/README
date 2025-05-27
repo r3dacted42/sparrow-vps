@@ -1,1 +1,10 @@
 # kubernetes manifests
+
+for sparrow-registry to work without https, you must create/edit /etc/docker/daemon.json with the following on each node:
+```json
+{
+  "insecure-registries": [
+    "registry.sparrow-vps.local"
+  ]
+}
+```

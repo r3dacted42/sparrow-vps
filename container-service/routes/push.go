@@ -1,16 +1,16 @@
 package routes
 
 import (
-	"deploy-service/types"
-	"deploy-service/worker"
+	"container-service/builder"
+	"container-service/types"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-// deploy given docker image
-func HandleDeploy(c *gin.Context) {
-	var request types.DeployRequest
+// push given docker image
+func HandlePushRequest(c *gin.Context) {
+	var request types.PushRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "bad request",
@@ -19,10 +19,8 @@ func HandleDeploy(c *gin.Context) {
 		return
 	}
 
-	url, err := worker.DeployFromImageTag(
+	msg, logs, success, err := builder.PushImage(
 		request.ImageTag,
-		request.PathName,
-		request.ExposePort,
 	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -32,8 +30,13 @@ func HandleDeploy(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message":     "project deployed successfully",
-		"project_url": url,
+	var status = http.StatusOK
+	if !success {
+		status = http.StatusBadRequest
+	}
+
+	c.JSON(status, gin.H{
+		"message": msg,
+		"logs":    logs,
 	})
 }

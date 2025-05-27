@@ -32,8 +32,8 @@ func HandleBuildRequest(c *gin.Context) {
 	clonePath := filepath.Join(cloneBaseDir, request.RepoOwner, request.RepoName)
 	log.Println("clone path: ", clonePath)
 
-	imageTag := fmt.Sprintf("%s/%s", request.RepoOwner, request.RepoName)
-	msg, logs, err := builder.BuildImageFromDockerfile(
+	imageTag := fmt.Sprintf("%s-%s", request.RepoOwner, request.RepoName)
+	fullTag, msg, logs, success, err := builder.BuildImage(
 		imageTag,
 		clonePath,
 		request.Dockerfile,
@@ -50,9 +50,14 @@ func HandleBuildRequest(c *gin.Context) {
 		log.Println("failed to delete clonePath: ", err)
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	var status = http.StatusOK
+	if !success {
+		status = http.StatusBadRequest
+	}
+
+	c.JSON(status, gin.H{
 		"message":   msg,
-		"image_tag": imageTag,
+		"image_tag": fullTag,
 		"logs":      logs,
 	})
 }

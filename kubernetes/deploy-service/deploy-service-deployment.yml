@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-service-deployment
+  namespace: sparrow-vps
+  labels:
+    app: deploy-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-service
+  template:
+    metadata:
+      labels:
+        app: deploy-service
+    spec:
+      serviceAccountName: deploy-service-sa
+      containers:
+        - name: deploy-service
+          image: r3dacted42/sparrow-deploy-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPARROW_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: sparrow-config
+                  key: allowedOrigins

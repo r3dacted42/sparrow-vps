@@ -33,6 +33,7 @@ func main() {
 	router.GET("/", routes.HandleRoot)
 	router.GET("/preview", routes.HandlePreviewRequest)
 	router.POST("/build", routes.HandleBuildRequest)
+	router.POST("/push", routes.HandlePushRequest)
 
 	port := ":8001"
 	if err := router.Run(port); err != nil {

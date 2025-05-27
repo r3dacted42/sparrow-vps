@@ -21,7 +21,9 @@ const auth = useAuthStore();
                 <RouterLink to="/add-project">Add Project</RouterLink>
             </li>
             <li>
-                <button class="outline secondary"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                <button class="outline secondary" v-on:click="auth.logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
             </li>
         </ul>
     </nav>

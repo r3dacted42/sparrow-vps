@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { checkLoggedIn } from '../helpers/loginHelpers';
+import { watch } from 'vue';
 import router from '../router';
+import { useAuthStore } from '../stores/auth';
 
-if (!checkLoggedIn()) {
-    router.push('/login');
-}
+const auth = useAuthStore();
+
+watch(
+  () => auth.isLoggedIn,
+  (isLoggedIn) => {
+    if (!isLoggedIn) {
+      router.push('/login');
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>

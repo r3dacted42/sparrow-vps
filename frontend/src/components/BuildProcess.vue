@@ -18,6 +18,8 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(['image-tag']);
+
 interface WorkflowStepData {
     title: string;
     endpoint: CallableFunction;
@@ -38,6 +40,7 @@ const steps = ref<Record<string, WorkflowStepData>>(
 );
 const currentStepIdx = ref(0);
 const working = ref(true);
+const success = ref(false);
 
 const indexedSteps = computed(() => {
     return stepKeys.value.map((k) => steps.value[k]).filter((s) => s);
@@ -53,7 +56,7 @@ watch(
             let response;
             if (stepKey === 'clone') {
                 response = await stepEndpoint(
-                    props.repoData.owner, 
+                    props.repoData.owner,
                     props.repoData.name,
                 );
                 if (response.data && response.status === 200) {
@@ -72,17 +75,27 @@ watch(
                 if (response.data && response.status === 200) {
                     newSteps[stepKey].result = `message: ${response.data.message}\n`
                         + `logs:\n${response.data.logs}`;
+                    imageTag.value = response.data.image_tag;
+                }
+            }
+            if (stepKey === 'push_image') {
+                response = await stepEndpoint(
+                    imageTag.value,
+                );
+                if (response.data && response.status === 200) {
+                    newSteps[stepKey].result = `message: ${response.data.message}\n`
+                        + `logs:\n${response.data.logs}`;
                 }
             }
             if (!response) throw Error("response not defined");
-            if (response.status !== 200 && response.status !== 201) {
-                throw Error(`message: ${response.data.message}\n`
-                    + `error: ${response.data.error}`);
+            if (response.status === 200 && newIdx >= stepKeys.value.length - 1) {
+                success.value = true;
             }
         } catch (err: any) {
             const errorMessage = err instanceof Error ? err.message : String(err);
             console.error(`failed at step ${steps.value[stepKey].title}:`, err);
-            newSteps[stepKey].result = `failed at step: ${errorMessage}`;
+            newSteps[stepKey].result = `failed at step: ${errorMessage}`
+                + `\nlogs:\n${err.response?.data?.logs}`;
             working.value = false;
         }
         steps.value = newSteps;
@@ -93,7 +106,17 @@ watch(
         }
     },
     { immediate: true },
-)
+);
+
+const imageTag = ref("");
+
+function onContinue() {
+    emit('image-tag', imageTag.value);
+}
+
+function onBack() {
+    emit('image-tag', "", true);
+}
 </script>
 
 <template>
@@ -101,8 +124,16 @@ watch(
         <div v-for="(step, idx) in indexedSteps" :key="idx">
             <p>{{ step.title }}</p>
             <progress v-if="working && currentStepIdx === idx"></progress>
-            <textarea v-if="step.result" v-model="step.result" 
-                v-bind:rows="step.result.split('\n').length > 4 ? 10 : 3" readonly></textarea>
+            <textarea v-if="step.result" v-model="step.result" v-bind:rows="step.result.split('\n').length > 4 ? 10 : 3"
+                readonly></textarea>
         </div>
+        <button v-if="!working && success" v-on:click="onContinue" class="wide">Continue</button>
+        <button v-if="!working && !success" v-on:click="onBack" class="wide secondary">Back</button>
     </div>
 </template>
+
+<style scoped>
+.wide {
+    width: 100%;
+}
+</style>

@@ -1,10 +1,20 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { AUTH_SERVICE, generateRandomHexString, GH_CLIENT_ID, SPARROW_ORIGIN } from '../helpers/loginHelpers';
 import { useAuthStore } from '../stores/auth';
 import router from '../router';
 
 const auth = useAuthStore();
+
+watch(
+  () => auth.isLoggedIn,
+  (isLoggedIn) => {
+    if (isLoggedIn) {
+      router.push('/');
+    }
+  },
+  { immediate: true },
+);
 
 onMounted(() => {
     const authURLString = window.location.search;
@@ -33,7 +43,7 @@ onMounted(() => {
     }
     getAccessToken(code);
     window.history.replaceState({}, document.title, window.location.pathname);
-})
+});
 
 async function getAccessToken(code: string) {
     const accessTokenEndPoint = `${AUTH_SERVICE}/getAccessToken?code=${code}`;

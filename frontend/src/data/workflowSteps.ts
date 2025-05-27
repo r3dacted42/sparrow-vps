@@ -10,6 +10,10 @@ const workflowSteps: Record<string, WorkflowStep> = {
         title: "Building Docker Image",
         endpoint: serviceEndpoints.containerService.build,
     },
+    'push_image': {
+        title: "Pushing Docker Image",
+        endpoint: serviceEndpoints.containerService.push,
+    },
 };
 
 export default workflowSteps;

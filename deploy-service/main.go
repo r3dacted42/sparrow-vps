@@ -2,7 +2,6 @@ package main
 
 import (
 	"deploy-service/routes"
-	"deploy-service/utils"
 	"log"
 	"os"
 	"strings"
@@ -16,10 +15,6 @@ func main() {
 	router := gin.Default()
 	godotenv.Load()
 
-	if err := utils.PingDocker(); err != nil {
-		panic("failed to ping docker: " + err.Error())
-	}
-
 	allowedOrigins := os.Getenv("SPARROW_ORIGIN")
 	log.Println("allowed origins: ", allowedOrigins)
 	if allowedOrigins == "" {
@@ -31,6 +26,7 @@ func main() {
 	}
 
 	router.GET("/", routes.HandleRoot)
+	router.POST("/deploy", routes.HandleDeploy)
 
 	port := ":8002"
 	if err := router.Run(port); err != nil {

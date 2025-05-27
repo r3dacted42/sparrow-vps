@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sparrow-registry-ingress
+  namespace: sparrow-vps
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  rules:
+    - host: registry.sparrow-vps.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sparrow-registry-svc
+                port:
+                  number: 5000
+  tls:
+  - hosts:
+    - registry.sparrow-vps.local
+    secretName: registry-tls-secret

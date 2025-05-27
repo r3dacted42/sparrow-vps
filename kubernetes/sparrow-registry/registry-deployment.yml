@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sparrow-registry
+  namespace: sparrow-vps
+  labels:
+    app: sparrow-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sparrow-registry
+  template:
+    metadata:
+      labels:
+        app: sparrow-registry
+    spec:
+      containers:
+        - name: registry
+          image: registry:2
+          ports:
+            - containerPort: 5000
+          env:
+            - name: REGISTRY_HTTP_ADDR
+              value: 0.0.0.0:5000
+            # --- TLS Configuration ---
+            - name: REGISTRY_HTTP_TLS_CERTIFICATE
+              value: /certs/registry/tls.crt
+            - name: REGISTRY_HTTP_TLS_KEY
+              value: /certs/registry/tls.key
+            # -------------------------
+            - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+              value: /var/lib/registry
+          volumeMounts:
+            - name: registry-data
+              mountPath: /var/lib/registry
+            # --- Mount the TLS secret ---
+            - name: tls-certs
+              mountPath: /certs/registry
+              readOnly: true
+      volumes:
+        - name: registry-data
+          persistentVolumeClaim:
+            claimName: docker-registry-pvc
+        - name: tls-certs
+          secret:
+            secretName: registry-tls-secret
