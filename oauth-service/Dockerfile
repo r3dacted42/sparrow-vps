@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --frozen-lockfile
 COPY . .
+RUN npx tsc
 EXPOSE 8003
 ENV SPARROW_ORIGIN="http://localhost:5173" \
     GITHUB_CLIENT_ID="PLACEHOLDER" \
@@ -10,4 +11,4 @@ ENV SPARROW_ORIGIN="http://localhost:5173" \
     SUPABASE_API_KEY="PLACEHOLDER" \
     SUPABASE_DB_URL="PLACEHOLDER" \
     SUPABASE_DB_PWD="PLACEHOLDER"
-CMD [ "node", "server.js" ]
+CMD ["node", "dist/server.js"]
