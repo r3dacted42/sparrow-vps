@@ -141,7 +141,7 @@ function logInWithGithub() {
     localStorage.setItem("CSRFToken", state);
     const params = new URLSearchParams({
         client_id: GH_CLIENT_ID,
-        redirect_uri: `${SPARROW_ORIGIN}/login`,
+        redirect_uri: `${SPARROW_ORIGIN}/#/login`,
         scope: "repo,user",
         state: state,
     });
