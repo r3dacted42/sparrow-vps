@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: deploy-service-monitor
+  namespace: sparrow-vps
+  labels:
+    release: prometheus  # Change if your Prometheus uses a different label
+spec:
+  selector:
+    matchLabels:
+      app: deploy-service
+  namespaceSelector:
+    matchNames:
+      - sparrow-vps
+  endpoints:
+    - port: 8002         # The port your deploy-service exposes metrics on
+      path: /metrics     # Metrics endpoint path
+      interval: 15s      # Scrape interval
