@@ -26,6 +26,8 @@ fronpath="$basepath/frontend"
 
 deploy_resource "$basepath/sparrow-pv.yml"
 deploy_resource "$basepath/repo-data-pvc.yml"
+deploy_resource "$basepath/sparrow-config.yml"
+deploy_resource "$basepath/sparrow-secrets.yml"
 
 deploy_resource "$repopath/repo-service-deployment.yml"
 deploy_resource "$repopath/repo-service-svc.yml"
