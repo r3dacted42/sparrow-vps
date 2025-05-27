@@ -57,7 +57,7 @@ export async function addProject(url: string) {
     const userData = getUserData();
     if (!userData) {
         console.error("User not logged in");
-        return;
+        return { error: "User not logged in" };
     }
 
     try {
@@ -70,17 +70,31 @@ export async function addProject(url: string) {
                 repolink: url,
             }),
         });
+        
         const result = await response.json();
-        console.log(result);
+        console.log("Add project result:", result);
         
         if (response.ok) {
+            // Refresh the projects list after successful addition
             await fetchProjects(userData.username);
+            return {
+                success: true,
+                message: result.message || "Project added successfully",
+                data: result.data
+            };
+        } else {
+            return {
+                error: true,
+                message: result.error || "Failed to add project"
+            };
         }
         
-        return result;
     } catch (error) {
         console.error("Error adding project:", error);
-        return { error: "Failed to add project" };
+        return { 
+            error: true, 
+            message: "Network error: Failed to add project" 
+        };
     }
 }
 
