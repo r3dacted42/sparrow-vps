@@ -14,12 +14,14 @@ async function addProject(
     next: NextFunction
 ): Promise<Response | void> {
     try {
-        const { user, repolink }= req.body as AddProjectRequest;
+        const { user, repolink, pathname } = req.body as AddProjectRequest;
         const tablename: string = "projects";
         const column: string = "repourl";
 
-        if (!user || !repolink) {
-            return res.status(400).json({ error: "Missing user or repository link" });
+        if (!user || !repolink || !pathname) {
+            return res.status(400).json({ 
+                error: "Missing required fields" 
+            });
         }
 
         const exists: boolean = await doesEntryExist(tablename, column, repolink);
@@ -32,7 +34,11 @@ async function addProject(
 
         const { data, error } = await client
             .from(tablename)
-            .insert([{ user: user, repourl: repolink }])
+            .insert([{ 
+                user: user, 
+                repourl: repolink,
+                pathname: pathname 
+            }])
             .select();
 
         if (error) {

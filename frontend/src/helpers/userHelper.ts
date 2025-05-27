@@ -53,11 +53,16 @@ export async function getUser(username: string) {
     }
 }
 
-export async function addProject(url: string) {
+export async function addProject(url: string, pathname: string) {
     const userData = getUserData();
     if (!userData) {
         console.error("User not logged in");
         return { error: "User not logged in" };
+    }
+
+    if (!pathname) {
+        console.error("Pathname is required");
+        return { error: "Pathname is required" };
     }
 
     try {
@@ -68,6 +73,7 @@ export async function addProject(url: string) {
             body: JSON.stringify({
                 user: userData.username,
                 repolink: url,
+                pathname: pathname,
             }),
         });
         

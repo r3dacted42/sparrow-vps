@@ -43,12 +43,14 @@ export interface DatabaseProject {
     user: string;
     repourl: string;
     created_at: string;
+    pathname: string; 
 }
 
 // API Request Interfaces
 export interface AddProjectRequest {
     user: string;
     repolink: string;
+    pathname: string;
 }
 
 export interface FetchProjectsQuery extends Record<string, string | undefined> {

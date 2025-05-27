@@ -38,6 +38,7 @@ export interface DatabaseProject {
     user: string;
     repourl: string;
     created_at: string;
+    pathname: string; 
 }
 
 
@@ -73,4 +74,11 @@ export interface ProjectResponse {
 }
 export interface FetchProjectsResponse {
     projects: DatabaseProject[];
+}
+
+// API Request Interface
+export interface AddProjectRequest {
+    user: string;
+    repolink: string;
+    pathname: string;
 }
