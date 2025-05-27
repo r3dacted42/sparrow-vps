@@ -20,3 +20,57 @@ export interface WorkflowStep {
 }
 
 
+// Database Entity Interfaces
+export interface DatabaseUser {
+    github_id: number;
+    username: string;
+    name: string;
+    email: string | null;
+    avatar_url: string;
+    html_url: string;
+    access_token: string;
+    modified_date: string;
+    created_date: string;
+}
+
+export interface DatabaseProject {
+    id?: number;
+    user: string;
+    repourl: string;
+    created_at: string;
+}
+
+
+// GitHub API Response Interfaces
+export interface GitHubTokenResponse {
+    access_token: string;
+    token_type: string;
+    scope: string;
+}
+
+export interface GitHubUser {
+    id: number;
+    login: string;
+    name: string;
+    email: string | null;
+    avatar_url: string;
+    html_url: string;
+}
+
+// API Response Interfaces
+export interface UserResponse {
+    user: DatabaseUser;
+}
+
+export interface CreateUserResponse {
+    message: string;
+    user: DatabaseUser;
+}
+
+export interface ProjectResponse {
+    message: string;
+    data: DatabaseProject[];
+}
+export interface FetchProjectsResponse {
+    projects: DatabaseProject[];
+}

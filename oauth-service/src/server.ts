@@ -1,10 +1,10 @@
 import express, { json } from "express";
 import cors from "cors";
 
-import authRoutes from "./routes/authRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import projectRoutes from "./routes/projectRoutes.js";
-import errorHandler from "./middleware/errorHandler.js";
+import authRoutes from "./router/authRoutes";
+import userRoutes from "./router/userRoutes";
+import projectRoutes from "./router/projectRoutes";
+import errorHandler from "./helper/errorHandler";
 
 const PORT = 8003;
 const app = express();

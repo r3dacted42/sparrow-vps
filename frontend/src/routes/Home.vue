@@ -25,7 +25,7 @@ watch(
             </button>
         </RouterLink>
         <p>
-            ...or view your <a>existing projects</a>.
+            ...or view your <RouterLink to="/projects" style="text-decoration: none;"><a>existing projects</a></RouterLink>.
         </p>
     </div>
 </template>
@@ -42,5 +42,6 @@ watch(
 .add-button {
     font-size: 24pt;
     font-weight: 500;
+    margin-bottom: 10pt ;
 }
 </style>
