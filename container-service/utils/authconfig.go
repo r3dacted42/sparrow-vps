@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func GetDockerAuthConfig(registry string) (string, error) {
+func GetDockerAuthConfig() (string, error) {
 	uname := os.Getenv("DOCKER_HUB_UNAME")
 	passwd := os.Getenv("DOCKER_HUB_PASSWD")
 	if uname == "" || passwd == "" {

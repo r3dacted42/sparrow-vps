@@ -57,7 +57,7 @@ func PushImage(
 	pushCounter.Inc()       // --- [Prometheus] Increment push count
 
 	log.Printf("attempting to push image '%s'", fullRegistryImageTag)
-	authConfig, err := utils.GetDockerAuthConfig("https://index.docker.io/v1/")
+	authConfig, err := utils.GetDockerAuthConfig()
 	if err != nil {
 		pushFailures.Inc() // --- [Prometheus] Failure metric
 		return "", "", false, fmt.Errorf("failed to get Docker Hub auth config: %w", err)
@@ -117,4 +117,3 @@ func PushImage(
 		return "image push failed", logBuf.String(), false, nil
 	}
 }
-
