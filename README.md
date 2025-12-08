@@ -45,47 +45,47 @@ To get the project running locally, you'll need to have Minikube and Docker inst
 ## Screenshots
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/0_homepage.png?raw=true">
 <figcaption>Sparrow VPS Homepage</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/0_homepage.png?raw=true">
 </figure>
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/1_login.png?raw=true">
 <figcaption>Dashboard</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/1_login.png?raw=true">
 </figure>
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/2_new_project.png?raw=true">
 <figcaption>New Project Page</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/2_new_project.png?raw=true">
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/3_dockerfile.png?raw=true">
 <figcaption>Dockerfile Preview</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/3_dockerfile.png?raw=true">
 </figure>
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/4_build_logs.png?raw=true">
 <figcaption>Image Build & Push Logs</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/4_build_logs.png?raw=true">
 </figure>
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/5_deploy_config.png?raw=true">
 <figcaption>Deployment Config</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/5_deploy_config.png?raw=true">
 </figure>
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/6_deploy_success.png?raw=true">
 <figcaption>Deployment Success Message</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/6_deploy_success.png?raw=true">
 </figure>
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/7_deployed_app.png?raw=true">
 <figcaption>Deployed App</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/7_deployed_app.png?raw=true">
 </figure>
 
 <figure>
-<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/8_projects_page.png?raw=true">
 <figcaption>All Projects</figcaption>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/8_projects_page.png?raw=true">
 </figure>
 
 ## TODOs (Known Issues)
