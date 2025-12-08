@@ -40,6 +40,16 @@ spec:
               key: allowedOrigins
         - name: DOCKER_HOST
           value: unix:///var/run/docker.sock
+        - name: DOCKER_HUB_UNAME
+          valueFrom:
+            secretKeyRef:
+              name: sparrow-secrets
+              key: dockerHubUname
+        - name: DOCKER_HUB_PASSWD
+          valueFrom:
+            secretKeyRef:
+              name: sparrow-secrets
+              key: dockerHubPasswd
       - name: docker-socker-proxy
         image: tecnativa/docker-socket-proxy:latest
         securityContext:
