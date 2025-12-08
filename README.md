@@ -22,23 +22,18 @@ The system is built on a microservices architecture, with distinct services for 
 - Project Dashboard: View and manage your deployed projects from a central dashboard.
 
 ## Getting Started
-To get the project running locally, you'll need to have Minikube and Docker installed.
-- Start Minikube:  
-  ```bash
-  minikube start
-  ```
+To get the project running locally, you'll need to have Minikube and Docker installed
 - Clone the repository:  
   ```bash
   git clone https://github.com/r3dacted42/sparrow-vps.git
   cd sparrow-vps
   ```
-- Run the deployment script:  
-  This script will set up the necessary Kubernetes resources and configure your local environment.
+- Configure the secrets as described in the [`kubernetes` README.md](https://github.com/r3dacted42/sparrow-vps/blob/main/kubernetes/README.md)
+- Run the deployment script: This script will start Minikube if it isn't already running, apply the necessary Kubernetes resources and add the `sparrow-vps.local` entry to `/etc/hosts`
   ```bash
   ./start_services.sh
   ```
-- Access the application:  
-  Once the services are running, you can access the frontend at `http://sparrow-vps.local`.
+- Once the services are running, you can access the frontend at `http://sparrow-vps.local`
 
 ## Usage
 - Login: Open your browser and navigate to the application URL. Log in using your GitHub account.
@@ -48,4 +43,53 @@ To get the project running locally, you'll need to have Minikube and Docker inst
 - View Your Project: Once deployed, you can view your running application and manage it from the projects dashboard.
 
 ## Screenshots
-TODO
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/0_homepage.png?raw=true">
+<figcaption>Sparrow VPS Homepage</figcaption>
+</figure>
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/1_login.png?raw=true">
+<figcaption>Dashboard</figcaption>
+</figure>
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/2_new_project.png?raw=true">
+<figcaption>New Project Page</figcaption>
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/3_dockerfile.png?raw=true">
+<figcaption>Dockerfile Preview</figcaption>
+</figure>
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/4_build_logs.png?raw=true">
+<figcaption>Image Build & Push Logs</figcaption>
+</figure>
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/5_deploy_config.png?raw=true">
+<figcaption>Deployment Config</figcaption>
+</figure>
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/6_deploy_success.png?raw=true">
+<figcaption>Deployment Success Message</figcaption>
+</figure>
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/7_deployed_app.png?raw=true">
+<figcaption>Deployed App</figcaption>
+</figure>
+
+<figure>
+<img src="https://github.com/r3dacted42/sparrow-vps/blob/main/screenshots/8_projects_page.png?raw=true">
+<figcaption>All Projects</figcaption>
+</figure>
+
+## TODOs (Known Issues)
+- Current deployment strategy does not allow for routing or serving static assets. A different ingress URL strategy similar to a sub-domain combined with predictable pathnames may be required.
+- Docker image pushing needs bare username and password for DockerHub, which is unsafe. A better approach may be to use a registry service for the user projects.
+- The database service needs to be implemented, there is no support for databases as of now.
+- Better project management and logging needs to be implemented.
