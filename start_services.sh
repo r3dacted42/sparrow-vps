@@ -49,10 +49,12 @@ deploy_resource "$fronpath/frontend-service.yml"
 deploy_resource "$fronpath/frontend-ingress.yml"
 
 minikube_ip=$(minikube ip)
-if grep -q "sparrow-vps.local" /etc/hosts; then
-  echo "entry for sparrow-vps.local exists, overwriting with $minikube_ip"
-  sudo sed -i "s/.*sparrow-vps.local$/$minikube_ip sparrow-vps.local/" /etc/hosts
+DOMAIN="sparrow-vps.local"
+
+if grep -q "[[:space:]]$DOMAIN" /etc/hosts; then
+  echo "Entry for $DOMAIN exists, updating to $minikube_ip..."
+  sudo sed -i "/[[:space:]]$DOMAIN/d" /etc/hosts
 else
-  echo "adding $minikube_ip sparrow-vps.local to /etc/hosts"
-  echo "$minikube_ip sparrow-vps.local" | sudo tee -a /etc/hosts
+  echo "Adding $DOMAIN to /etc/hosts..."
 fi
+echo "$minikube_ip $DOMAIN" | sudo tee -a /etc/hosts > /dev/null

@@ -6,11 +6,11 @@ metadata:
 data:
   prometheus.yml: |
     global:
-      scrape_interval: 15s
+      scrape_interval: 5s
     scrape_configs:
       - job_name: 'deploy-service'
         static_configs:
-          - targets: ['sparrow-vps.local:30082']
+          - targets: ['deploy-service-svc.sparrow-vps:8002'] 
       - job_name: 'container-service'
         static_configs:
-          - targets: ['sparrow-vps.local:30081']
+          - targets: ['container-service-svc.sparrow-vps:8001']

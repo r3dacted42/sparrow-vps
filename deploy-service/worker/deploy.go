@@ -63,7 +63,12 @@ func init() {
 			Name: deployNamespace,
 		},
 	}
-	_, _ = clientset.CoreV1().Namespaces().Create(ctx, namespace, metav1.CreateOptions{})
+	_, err = clientset.CoreV1().Namespaces().Create(ctx, namespace, metav1.CreateOptions{})
+	if err != nil {
+		log.Printf("failed to create namespace '%s': %v", deployNamespace, err)
+	} else {
+		log.Printf("successfully created namespace: %s", deployNamespace)
+	}
 
 	baseDomain = os.Getenv("SPARROW_ORIGIN")
 	if baseDomain == "" {

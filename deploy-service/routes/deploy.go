@@ -4,6 +4,7 @@ import (
 	"deploy-service/types"
 	"deploy-service/worker"
 	"net/http"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +26,8 @@ func HandleDeploy(c *gin.Context) {
 		request.ExposePort,
 	)
 	if err != nil {
+		log.Printf("Deployment failed for image '%s' on path '%s': %v", request.ImageTag, request.PathName, err)
+		
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "internal server error",
 			"error":   err.Error(),

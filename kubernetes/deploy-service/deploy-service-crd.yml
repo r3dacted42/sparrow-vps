@@ -6,8 +6,8 @@ rules:
   - apiGroups: ["apps"] # Permissions for Deployments
     resources: ["deployments"]
     verbs: ["create", "get", "update", "patch", "delete", "list", "watch"]
-  - apiGroups: [""] # Permissions for Services (core API group)
-    resources: ["services"]
+  - apiGroups: [""] # Permissions for Services and Namespaces (core API group)
+    resources: ["services", "namespaces"]
     verbs: ["create", "get", "update", "patch", "delete", "list", "watch"]
   - apiGroups: ["networking.k8s.io"] # Permissions for Ingresses
     resources: ["ingresses"]
